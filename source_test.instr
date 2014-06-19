@@ -1,0 +1,91 @@
+/*******************************************************************************
+*         McStas instrument definition URL=http://www.mcstas.org
+*
+* Instrument: test (rename also the example and DEFINE lines below)
+*
+* %Identification
+* Written by: Your name (email)
+* Date: Current Date
+* Origin: Your institution
+* Release: McStas CVS-080208
+* Version: 0.2
+* %INSTRUMENT_SITE: Institution_name_as_a_single word
+*
+* Instrument short description
+*
+* %Description
+* Instrument longer description (type, elements, usage...)
+*
+* Example: mcrun test.instr <parameters=values>
+*
+* %Parameters
+* Par1: [unit] Parameter1 description
+*
+* %Link
+* A reference/HTML link for more information
+*
+* %End
+*******************************************************************************/
+
+/* Change name of instrument and input parameters with default values */
+DEFINE INSTRUMENT test(distance=1.0)
+
+/* The DECLARE section allows us to declare variables or  small      */
+/* functions in C syntax. These may be used in the whole instrument. */
+DECLARE
+%{
+%}
+
+/* The INITIALIZE section is executed when the simulation starts     */
+/* (C code). You may use them as component parameter values.         */
+INITIALIZE
+%{
+%}
+
+/* Here comes the TRACE section, where the actual      */
+/* instrument is defined as a sequence of components.  */
+TRACE
+
+/* The Arm() class component defines reference points and orientations  */
+/* in 3D space. Every component instance must have a unique name. Here, */
+/* Origin is used. This Arm() component is set to define the origin of  */
+/* our global coordinate system (AT (0,0,0) ABSOLUTE). It may be used   */
+/* for further RELATIVE reference, Other useful keywords are : ROTATED  */
+/* EXTEND GROUP PREVIOUS. Also think about adding a neutron source !    */
+/* Progress_bar is an Arm displaying simulation progress.               */
+
+COMPONENT Origin = Progress_bar()
+  AT (0,0,0) ABSOLUTE
+
+COMPONENT ESS_1b_source = Virtual_input(
+    filename = "1b_source_ess", type = "float",verbose=1,smooth = 0)
+  AT (0, 0, 0) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+COMPONENT v_mon = Monitor_nD(
+    options = "v limits=[0,10000], bins=1000",
+    filename = "v_monitor", xwidth = 5, yheight = 5)
+  AT (0, 0, distance) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+COMPONENT image = PSD_monitor(
+    restore_neutron = 1, filename = "imager", xwidth=5.0, yheight = 5.0)
+  AT (0, 0, distance) RELATIVE Origin
+  ROTATED (0, 0,0) RELATIVE Origin
+
+COMPONENT lamb = L_monitor(
+    nL = 1000, filename = "lambda", xwidth = 5.0, yheight = 5.0,
+    Lmin = 0.0, Lmax = 10.0)
+  AT (0, 0,distance) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+/* This section is executed when the simulation ends (C code). Other    */
+/* optional sections are : SAVE                                         */
+FINALLY
+%{
+%}
+/* The END token marks the instrument definition end */
+END
+
+
+
