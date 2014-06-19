@@ -1,0 +1,87 @@
+DEFINE INSTRUMENT RegularGuide(MonitorWidth= 5.00, MonitorHeight = 5.00, dist = 5.00)
+
+TRACE
+//Define the orgin of the geometry//
+COMPONENT Origin = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+//Creating a simple source of neutrons later to be the ESS Source//
+COMPONENT SimpleSource = Source_div(
+    xwidth = 1, yheight = 1, focus_aw = 4, focus_ah = 4, E0 = 14,
+    dE = 2)
+  AT (0, 0, dist) RELATIVE Origin
+
+
+COMPONENT TestGuide = Guide(
+    w1 = 2, h1 = 2, w2 = 2, h2 = 2, l = .3,
+    R0 = 0.99, Qc = 0.0219, alpha = 6.07, m = 2, W = 0.003)
+  AT (0, 0, dist/2) RELATIVE Origin//
+
+/*Future Use*/
+/*COMPONENT Elliptical_Mirror = Guide_anyshape(
+    reflect = 1, geometry = 0, xwidth = 1,
+    yheight = 1, zdepth = 1, center = 1, transmit = 0, R0 = 0.99,
+    Qc = 0.0219, alpha = 3, m = 2, W = 0.03)
+  AT (0, 0, dist/2) RELATIVE Origin*/ 
+
+
+//Square monitor, Measuring position (x,y) vs intensity//
+//Later to incorporate Time Of Flight as well//
+COMPONENT monzns = Monitor_nD(
+    xwidth=5, yheight=5, options="square, x bins=1000 limits=[-2.5, 2.5], y bins=1000 limits[-2.5, 2.5]") /*previously: auto time bins=1000*/
+  AT (0, 0, dist) RELATIVE SimpleSource 
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
