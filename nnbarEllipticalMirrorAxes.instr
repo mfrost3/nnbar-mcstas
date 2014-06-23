@@ -1,0 +1,101 @@
+
+DEFINE INSTRUMENT NNBAR_ELLIPSE(dist = 5.00)
+
+TRACE
+//Define the orgin of the geometry//
+COMPONENT Origin = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT Box1 = Arm()
+AT (3,0,50) ABSOLUTE
+
+COMPONENT Box2 = Arm()
+AT (-3,0,50) ABSOLUTE
+
+//Creating a simple source of neutrons later to be the ESS Source//
+COMPONENT SimpleSource = Source_div(
+    xwidth = 1, yheight = 1, focus_aw = 4, focus_ah = 4, E0 = 14,
+    dE = 2)
+  AT (0, 0, 0) RELATIVE Origin
+
+
+
+COMPONENT nnbarEllipse = Elliptic_guide_gravity(
+    l = 100, majorAxisxw = 50, minorAxisxw = 2.005,
+    majorAxisyh = 50, minorAxisyh = 2.05, majorAxisoffsetxw = 10,
+    majorAxisoffsetyh = 10)
+  AT (0, 0, 0) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+
+
+
+//Square monitor, Measuring position (x,y) vs intensity//
+//Later to incorporate Time Of Flight as well//
+COMPONENT monzns = Monitor_nD(
+    xwidth=5, yheight=5, options="square, x bins=1000 limits=[-2.5, 2.5], y bins=1000 limits[-2.5, 2.5]") 
+  AT (0, 0, dist) RELATIVE Origin
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
