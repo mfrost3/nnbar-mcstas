@@ -1,0 +1,47 @@
+
+DEFINE INSTRUMENT ESS_GuidedSetup (dist = 5.00)
+
+TRACE
+//Define the orgin of the geometry//
+COMPONENT Origin = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+//Calls for the binary file containing the ESS Source//
+COMPONENT ESS_1b_source = Virtual_input(
+    filename = "wj-blist_mcstas.asc", type = "float",verbose=1,smooth = 0)
+  AT (0, 0, 0) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+//Intend for the guide to be an ellipse in the future//
+/*COMPONENT TestGuide = Guide(
+    w1 =5, h1 = 5, w2 =5, h2 = 5, l = 5,
+    R0 = 0.99, Qc = 0.0219, alpha = 6.07, m = 2, W = 0.003)
+  AT (0,0,0) RELATIVE Origin
+ROTATED (0,0,0) RELATIVE Origin*/
+
+//Square monitor, Measuring position (x,y) vs intensity//
+//Later to incorporate Time Of Flight as well//
+COMPONENT monzns = Monitor_nD(
+    xwidth=5, yheight=5, options="square, x bins=100 limits=[-2.5, 2.5], y bins=100 limits[-2.5, 2.5]") //I changed the bins from 1000x1000 because I could only make out a couple of pixels of intensity on the plot.\\
+  AT (0, 0, dist) RELATIVE ESS_1b_source
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
