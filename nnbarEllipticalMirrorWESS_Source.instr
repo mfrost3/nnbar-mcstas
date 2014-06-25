@@ -1,0 +1,101 @@
+
+DEFINE INSTRUMENT SimpleMonitor(dist = 5.00, EnF = 9.96, ExF = 49.96)
+TRACE
+//Define the orgin of the geometry//
+COMPONENT Origin = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+COMPONENT Box1 = Arm()
+AT (3,0,0) ABSOLUTE
+
+COMPONENT Box2 = Arm()
+AT (-3,0,0) ABSOLUTE
+
+//ESS Source//
+COMPONENT ESS_1b_source = Virtual_input(
+    filename = "wj-blist_mcstas.asc", type = "text",verbose=1,smooth = 0)
+  AT (0, 0, 0) RELATIVE Origin
+  ROTATED (0, 0, 9.96) RELATIVE Origin
+
+COMPONENT nnbar_Ellipse = Elliptic_guide_gravity(
+    l = 40, xwidth = 2.005, yheight = 2.005, linxw = EnF,
+    loutxw = ExF, linyh = EnF, loutyh = ExF, R0=0.99, Qc=0.0219, alpha=6.07, m=3.0, W=0.003)
+  AT (0, 0, 10) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+//Square monitor, Measuring position (x,y) vs intensity//
+//Later to incorporate Time Of Flight as well//
+COMPONENT monzns = Monitor_nD(
+    xwidth=5, yheight=5, options="square, x bins=500 limits=[-2.5, 2.5], y bins=500 limits[-2.5, 2.5]") 
+  AT (0, 0, dist) RELATIVE Origin
+
+//Monitor Wavelength Spectrum
+COMPONENT WavelengthSpectrum = Monitor_nD(
+    xwidth=5, yheight=5, options="square wavelength bins=500 limits=[0, 10]") 
+  AT (0, 0, dist) RELATIVE Origin
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
