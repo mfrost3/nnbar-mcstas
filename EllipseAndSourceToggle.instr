@@ -1,0 +1,154 @@
+
+DEFINE INSTRUMENT NNBARSmartEllipse(SemiMajorAxis = 50, SemiMinorAxis = 2.005, Entrance_Position=10, Exit_Position = 50,  Repeat = 1, SourceHorizontal = 0.04, SourceVertical = 0)
+DECLARE
+%{
+double a; 		//semi-major axis
+double b;		//semi-minor axis
+double f;		//Distance between the center of the ellipse and its foci
+double GuideLength; 
+double offset; 	//The distance between the entrance and the center of the ellipse
+double MonPos; 	//Position of the monitor relative to the origin
+double EllipsePos;	 //Position of the elliptical guide relative to the origin
+double SourcePos; 	//Position of the source relative to the origin
+
+%}
+INITIALIZE
+%{
+/*Basic Geomtric Properties of the Ellipse*/
+a= SemiMajorAxis;
+b=SemiMinorAxis;
+f  = sqrt(a*a-b*b);	//Basic formula derived through simple manipulations
+
+
+/*Requirements for our Guide*/
+GuideLength = Exit_Position-Entrance_Position;
+offset = a-Entrance_Position; 
+
+
+/*Positions of the components of our geometry*/ 	
+MonPos = f+a ; 
+EllipsePos = a-offset;
+/*For the source to be located at the first focus its z coordiante would be: a-f */
+%}
+TRACE
+//Define the orgin of the geometry//
+COMPONENT Origin = Progress_bar()
+AT (0,0,0) ABSOLUTE
+
+/*The following two components are to scale the viewable area in the
+   when tracing the simulation so the whole ellipse can be seen.*/
+COMPONENT Box1 = Arm()
+AT (b,0,0) ABSOLUTE
+
+COMPONENT Box2 = Arm()
+AT (-b,0,0) ABSOLUTE
+
+/*ESS Source*/
+COMPONENT ESS_1b_source = Virtual_input(
+    filename = "wj-blist_mcstas.asc", type = "text",verbose=1,smooth = 0, repeat_count = Repeat)
+  AT (0, SourceVertical, SourceHorizontal) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+/*Elliptic Guide*/
+COMPONENT NNBARELLIPSE = Elliptic_guide_gravity(
+    l = GuideLength, majorAxisxw = a, minorAxisxw = b,
+    majorAxisyh = a, minorAxisyh = b,
+    majorAxisoffsetxw = offset, majorAxisoffsetyh = offset, R0=0.99, m=6)
+  AT (0, 0, EllipsePos) RELATIVE Origin
+  ROTATED (0, 0, 0) RELATIVE Origin
+
+/*Monitors*/
+COMPONENT IntensityMonitor = Monitor_nD(
+    xwidth=5, yheight=5, options="square, x bins=500 limits=[-2.5, 2.5], y bins=500 limits[-2.5, 2.5]") 
+  AT (0, 0, MonPos) RELATIVE Origin
+
+COMPONENT WavelengthSpectrum = Monitor_nD(
+    xwidth=5, yheight=5, options="square wavelength bins=500 limits=[0,10]") 
+  AT (0, 0, MonPos) RELATIVE Origin
+
+COMPONENT VelocityMonitor = Monitor_nD(
+    xwidth=5, yheight=5, options="square v bins=500 limits=[0, 5000]") 
+  AT (0, 0, MonPos) RELATIVE Origin
+
+COMPONENT TOFMonitor = Monitor_nD(
+    xwidth=5, yheight=5, options="square time bins=500 limits=[0, 30]") 
+  AT (0, 0, MonPos) RELATIVE Origin
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
